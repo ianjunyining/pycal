@@ -5,7 +5,7 @@ if __name__ == '__main__':
     while True:
         expression = input("> ")
         try:
-            result = calculator.calculate(expression, True)
+            result = calculator.calculate(expression)
             print(str(result))
         except Exception as e:
             print(e)

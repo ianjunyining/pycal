@@ -15,6 +15,7 @@ class OP(Enum):
     NEG = 11
     NONE = 12
     ASSIGNMENT = 15
+    UFUNC_OP = 16
 
 
 class FUNC(Enum):
@@ -33,6 +34,23 @@ class FUNC(Enum):
     ABS = 13
     ARCSIN = 14
 
+
+class TermType(Enum):
+    Operator = 1
+    Operand = 2
+    Func = 3
+    Var = 4
+    UFUNC = 5
+
+
+class UfuncAttr():
+    def __init__(self, exp_tree, paramaters:list=None) -> None:
+        self.exp_tree = exp_tree
+        self.num_operands = len(paramaters)
+        self.paramaters = paramaters
+
+
+
 class TermAttr:
     def priority_not_less(op1 : OP, op2 : OP):
         priority = {
@@ -47,6 +65,7 @@ class TermAttr:
             OP.FAC : 5,
             OP.NEG : 5,
             OP.FUNC_OP : 6,
+            OP.UFUNC_OP : 6,
         }
         return priority[op1] >= priority[op2]
 
@@ -119,14 +138,9 @@ class TermAttr:
             "=" : OP.ASSIGNMENT,
         }
 
-class TermType(Enum):
-    Operator = 1
-    Operand = 2
-    Func = 3
-    Var = 4
 
 class Term():
-    def __init__(self, term_type: TermType, num:Complex=None, op:OP=None, func:FUNC=None, var=None) -> None:
+    def __init__(self, term_type: TermType, num:Complex=None, op:OP=None, func:FUNC=None, var=None, ufunc=None) -> None:
         self.term_type = term_type
         self.num = num
         if term_type == TermType.Operator and not isinstance(op, OP):
@@ -134,8 +148,11 @@ class Term():
         self.op = op
         self.func = func
         self.var = var
+        self.ufunc = ufunc
         if term_type == TermType.Func:
             self.op = OP.FUNC_OP
+        if term_type == TermType.UFUNC:
+            self.op = OP.UFUNC_OP
     
     def __str__(self) -> str:
         if self.term_type == TermType.Operator:
@@ -144,5 +161,10 @@ class Term():
             return str(self.num)
         elif self.term_type == TermType.Var:
             return self.var
+        elif self.term_type == TermType.UFUNC:
+            return self.ufunc
         else:
             return str(self.func)
+        
+    def is_assignment(self):
+        return self.term_type == TermType.Operator and self.op == OP.ASSIGNMENT

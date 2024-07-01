@@ -74,3 +74,6 @@ Tree:
 
 ### Calculate from expression tree
 We calculate the result in inorder from expression tree
+
+# License
+See [License](https://github.com/ianjunyining/pycal/blob/main/LICENSE).

@@ -5,11 +5,17 @@ class Complex():
         self.real = real
         self.image = image
 
-    def is_pure_real(self):
-        pass
+    def is_pure_real(self, other=None):
+        if other:
+            return self.image == 0 and other.image == 0
+        else:
+            return self.image == 0
 
-    def is_pure_image(self):
-        pass
+    def is_pure_image(self, other=None):
+        if other:
+            return self.real == 0 and other.real == 0
+        else:
+            return self.real == 0
 
     def add(self, other):
         return Complex(
@@ -38,6 +44,16 @@ class Complex():
         return self.real ** 2 + self.image ** 2
 
     def div(self, other):
+        if self.is_pure_image(other):
+            return Complex(
+                real=0,
+                image=self.image * self.other,
+            )
+        if self.is_pure_real(other):
+            return Complex(
+                real=self.real * other.real,
+                image=0,
+            )
         return self.mul(other.conjugate()).mul_scale(1/other.mod_sq())  
     
     def neg(self):
@@ -54,8 +70,11 @@ class Complex():
         (x + iy)^(a + ib) = R cos(W) + i R sin(W)
 
         (1 + i)^(2 + i) = -0.309743505 + 0.857658013 i"""
-        if self.is_pure_real() and other.is_pure_real():
-            pass
+        if self.is_pure_real(other):
+            return Complex(
+                real=self.real ** other.real,
+                image=0,
+            )
         else:
             z = other if isinstance(other, Complex) else Complex(real=other)
             w = math.atan2(self.image, self.real)
@@ -81,6 +100,11 @@ class Complex():
         sin(1 + i) = 1.29845758 + 0.634963915 i
         cos(1 + i) = 0.833730025 - 0.988897706 i
         """
+        if self.is_pure_real():
+            return Complex(
+                real=math.sin(self.real),
+                image=0,
+            )
         e = Complex(real=math.e)
         f1 = e.pow(self.mul(Complex(image=1)))
         f2 = e.pow(self.mul(Complex(image=-1)))
@@ -100,6 +124,11 @@ class Complex():
         sin(1 + i) = 1.29845758 + 0.634963915 i
         cos(1 + i) = 0.833730025 - 0.988897706 i
         """
+        if self.is_pure_real():
+            return Complex(
+                real=math.cos(self.real),
+                image=0,
+            )
         e = Complex(real=math.e)
         f1 = e.pow(self.mul(Complex(image=1)))
         f2 = e.pow(self.mul(Complex(image=-1)))
@@ -110,6 +139,11 @@ class Complex():
         log(a*b) = log(a) + log(b)
         log(x+iy) = log(r * e^iw) = log(r) + log(e^iw) = log(r) + iw
         """
+        if self.is_pure_real():
+            return Complex(
+                real=math.log(self.real),
+                image=0,
+            )
         w = math.atan2(self.image, self.real)
         r = (self.real ** 2 + self.image ** 2) ** 0.5
         return Complex(real=math.log(r), image=w)
@@ -118,12 +152,22 @@ class Complex():
         """
         tanz = sinz / cosz
         """
+        if self.is_pure_real():
+            return Complex(
+                real=math.tan(self.real),
+                image=0,
+            )
         return self.sin().div(self.cos())
     
     def arcsin(self):
         """
         arcsin(z) = -i ln(iz + (1 - z^2)^0.5)
         """
+        if self.is_pure_real():
+            return Complex(
+                real=math.asin(self.real),
+                image=0,
+            )
         a = self.mul(Complex(image=1))
         one = Complex(real=1)
         b = one.sub(self.pow(2)).pow(0.5)

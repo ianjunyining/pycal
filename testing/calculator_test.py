@@ -10,17 +10,17 @@ class Test_calculator(ut.TestCase):
         self.assertAlmostEqual(complex.real, expect_real)
         self.assertAlmostEqual(complex.image, expect_image)    
 
-    def _test_expression(self):
+    def test_expression(self):
         calculator = Calculator()
         result = calculator.calculate("4(-1)^3 + sin(i(1/2 + i^i))") # -4 + 0.768497554 i
         self.compare_complex(result, -4, 0.768497554)
 
-    def _test_simple_expression(self):
+    def test_simple_expression(self):
         calculator = Calculator()
         result = calculator.calculate("3+-2")
         self.compare_complex(result, 1, 0)
 
-    def _test_var(self):
+    def test_var(self):
         calculator = Calculator()
         calculator.calculate("d = 3")
         result = calculator.calculate("d")
@@ -31,6 +31,12 @@ class Test_calculator(ut.TestCase):
         calculator.calculate("f(x) = 3 * x", True)
         result = calculator.calculate("f(3)")
         self.compare_complex(result, 9, 0)
+
+    def test_func_mod(self):
+        calculator = Calculator()
+        calculator.calculate("f(N1) = N1 % 2", True)
+        result = calculator.calculate("f(3)")
+        self.assertAlmostEqual(1, result)
 
     def test_nested_function(self):
         calculator = Calculator()

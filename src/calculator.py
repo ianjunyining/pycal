@@ -10,6 +10,7 @@ class Calculator:
         self.global_vars = {}
         self.local_vars = {}
         self.ufunc_map = {}
+        self.expression = None
 
     def split_number_and_variable(self, input_str):
         # Define the regular expression pattern
@@ -50,31 +51,31 @@ class Calculator:
         terms = []
         pattern = r"([+\-*/^\(\)\!\%\,\=])"
         parts = re.split(pattern, expression)
+        parts = [part.strip() for part in parts]
         parts = self.modify_parts(parts)
         parts = [part.strip() for part in parts]
         termattr = TermAttr
         op_map = termattr.op_map()
         func_map = termattr.func_map()
         for term in parts:
-            try:
-                float(term)
+            if not term:
+                continue
+            if term[0].isnumeric():
                 terms.append(Term(TermType.Operand, num=Complex(real=float(term))))
-            except:
-
-                if term == "π" or term == "pi":
-                    terms.append(Term(TermType.Operand, num=Complex(real=float(math.pi))))
-                elif term == "e":
-                    terms.append(Term(TermType.Operand, num=Complex(real=float(math.e))))
-                elif term == "i":
-                    terms.append(Term(TermType.Operand, num=Complex(image=1)))
-                elif term == "":
-                    pass
-                elif term in func_map.keys():
-                    terms.append(Term(TermType.Func, func=func_map[term]))
-                elif term in op_map.keys():
-                    terms.append(Term(TermType.Operator, op=op_map[term]))
-                else:
-                    terms.append(Term(TermType.Var, var=term))
+            elif term == "π" or term == "pi":
+                terms.append(Term(TermType.Operand, num=Complex(real=float(math.pi))))
+            elif term == "e":
+                terms.append(Term(TermType.Operand, num=Complex(real=float(math.e))))
+            elif term == "i":
+                terms.append(Term(TermType.Operand, num=Complex(image=1)))
+            elif term == "":
+                pass
+            elif term in func_map.keys():
+                terms.append(Term(TermType.Func, func=func_map[term]))
+            elif term in op_map.keys():
+                terms.append(Term(TermType.Operator, op=op_map[term]))
+            else:
+                terms.append(Term(TermType.Var, var=term))
                     
         return terms
 
@@ -116,7 +117,7 @@ class Calculator:
         return new_terms
 
 
-    def operation(self, num1:Complex, num2:Complex, op):
+    def operation(self, num1:Complex, num2:Complex, op:OP):
         main_num = num2 if num1 == None else num1
 
         if op == OP.ADD:
@@ -213,9 +214,9 @@ class Calculator:
         rterm = node.data
         if rterm.is_assignment():
             if node.left.data.term_type == TermType.UFUNC:
-                paramater = list(node.left.left.data.var)
+                paramater = [node.left.left.data.var]
                 func_name = node.left.data.ufunc
-                self.ufunc_map[func_name] = UfuncAttr(node.right, paramater)
+                self.ufunc_map[func_name] = UfuncAttr(node.right, paramater, self.expression)
             else:
                 var = node.left  
                 num = self.calculate_from_exp_tree_no_assignment(node.right)
@@ -251,7 +252,6 @@ class Calculator:
         return stack[0]
     
 
-
     def in_order_to_post_order(self, terms : list):
         post_order = []
         stack = []
@@ -281,6 +281,7 @@ class Calculator:
     
     def calculate(self, expression: str, log=False):
         tree = Tree()
+        self.expression = expression
         terms = self.parse_string(expression)
         new_terms = self.modify_in_order(terms)
         post_order = self.in_order_to_post_order(new_terms)

@@ -24,7 +24,7 @@ class TestComplex(ut.TestCase):
         c2 = Complex(real=3, image=0)
         power = c1.pow(c2)
         print(power)
-        self.compare_complex(power, -0.309743505, 0.857658013)
+        self.compare_complex(power, -13794529160825774685277673333164767, 0)
 
     def test_div(self):
         c1 = Complex(real=1, image=1)

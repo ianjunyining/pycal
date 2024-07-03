@@ -44,10 +44,11 @@ class TermType(Enum):
 
 
 class UfuncAttr():
-    def __init__(self, exp_tree, paramaters:list=None) -> None:
+    def __init__(self, exp_tree, paramaters:list=None, expression=None) -> None:
         self.exp_tree = exp_tree
         self.num_operands = len(paramaters)
         self.paramaters = paramaters
+        self.expression = expression
 
 
 
@@ -61,6 +62,7 @@ class TermAttr:
             OP.ADD : 2,
             OP.DIV : 3,
             OP.MUL : 3,
+            OP.MOD : 3,
             OP.POW : 4,
             OP.FAC : 5,
             OP.NEG : 5,

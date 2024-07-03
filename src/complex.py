@@ -5,6 +5,12 @@ class Complex():
         self.real = real
         self.image = image
 
+    def is_pure_real(self):
+        pass
+
+    def is_pure_image(self):
+        pass
+
     def add(self, other):
         return Complex(
             real=self.real + other.real, 
@@ -48,15 +54,18 @@ class Complex():
         (x + iy)^(a + ib) = R cos(W) + i R sin(W)
 
         (1 + i)^(2 + i) = -0.309743505 + 0.857658013 i"""
-        z = other if isinstance(other, Complex) else Complex(real=other)
-        w = math.atan2(self.image, self.real)
-        r = (self.real ** 2 + self.image ** 2) ** 0.5
-        R = math.exp(z.real * math.log(r) - w * z.image)
-        W = z.image * math.log(r) + w * z.real
-        return Complex(
-            real=R * math.cos(W),
-            image=R * math.sin(W),
-        )
+        if self.is_pure_real() and other.is_pure_real():
+            pass
+        else:
+            z = other if isinstance(other, Complex) else Complex(real=other)
+            w = math.atan2(self.image, self.real)
+            r = (self.real ** 2 + self.image ** 2) ** 0.5
+            R = math.exp(z.real * math.log(r) - w * z.image)
+            W = z.image * math.log(r) + w * z.real
+            return Complex(
+                real=R * math.cos(W),
+                image=R * math.sin(W),
+            )
     
     def sin(self):
         """

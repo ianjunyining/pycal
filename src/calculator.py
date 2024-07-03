@@ -262,7 +262,10 @@ class Calculator:
                     stack.append(term)
                 elif term.op == OP.RIGHT_PAR:
                     while stack[-1].op != OP.LEFT_PAR:
-                        post_order.append(stack.pop())
+                        if stack:
+                            post_order.append(stack.pop())
+                        else:
+                            raise Exception("Missed right parentesis")
                     stack.pop()
                 elif len(stack) == 0:
                     stack.append(term)
@@ -278,7 +281,6 @@ class Calculator:
     
     def calculate(self, expression: str, log=False):
         tree = Tree()
-
         terms = self.parse_string(expression)
         new_terms = self.modify_in_order(terms)
         post_order = self.in_order_to_post_order(new_terms)

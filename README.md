@@ -29,6 +29,16 @@ It supports pre-defined functions:
         "asin" : FUNC.ARCSIN,
     }
 ``
+## user functions
+It supports function making e.g. `f(x) = 3x + 1`
+
+## commands
+commands: `ls`, `help` or `?`, `h`, `ch`, `quit`
+`ls`: list
+`h` : history
+`ch` : clear history
+others are self-explainatory
+
 # 3. How to use it?
 This calculator is straight-forward e.g.,
 - `3 * 2`
@@ -38,6 +48,7 @@ This calculator is straight-forward e.g.,
 - `e^(iπ)`
 - `a = 3 * 2 ^ 2`
 - `b = a/2`
+- `d(a) = a + a^2 + a^3`
 
 
 # 4. Basic design

@@ -2,9 +2,7 @@ from src.calculator import Calculator
 
 def display_global_var(global_var:dict):
     for key, val in global_var.items():
-        global_var[key] = str(val)
-    return global_var
-
+        print(key, "=", str(val))
 
 if __name__ == '__main__':
     calculator = Calculator()
@@ -15,7 +13,7 @@ if __name__ == '__main__':
             break
         elif input_str == "ls":
             history.append(input_str)
-            print(display_global_var(calculator.global_vars))
+            display_global_var(calculator.global_vars)
         elif input_str == "h":
             print(history)
             history.append(input_str)

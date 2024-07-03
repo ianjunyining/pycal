@@ -5,17 +5,11 @@ class Complex():
         self.real = real
         self.image = image
 
-    def is_pure_real(self, other=None):
-        if other:
-            return self.image == 0 and other.image == 0
-        else:
-            return self.image == 0
+    def is_pure_real(self):
+        return self.image == 0
 
-    def is_pure_image(self, other=None):
-        if other:
-            return self.real == 0 and other.real == 0
-        else:
-            return self.real == 0
+    def is_pure_image(self):
+        return self.real == 0
 
     def add(self, other):
         return Complex(
@@ -34,6 +28,7 @@ class Complex():
             real=self.real * other.real - self.image * other.image, 
             image=self.real * other.image + self.image * other.real
         )
+    
     def mul_scale(self, scale : float):
         return Complex(real=self.real * scale, image=self.image * scale)
 
@@ -44,15 +39,10 @@ class Complex():
         return self.real ** 2 + self.image ** 2
 
     def div(self, other):
-        if self.is_pure_image(other):
+        if (not isinstance(other, Complex)) or other.is_pure_real():
             return Complex(
-                real=0,
-                image=self.image * self.other,
-            )
-        if self.is_pure_real(other):
-            return Complex(
-                real=self.real * other.real,
-                image=0,
+                real=self.real / other.real,
+                image=self.image / other.real,
             )
         return self.mul(other.conjugate()).mul_scale(1/other.mod_sq())  
     
@@ -70,21 +60,22 @@ class Complex():
         (x + iy)^(a + ib) = R cos(W) + i R sin(W)
 
         (1 + i)^(2 + i) = -0.309743505 + 0.857658013 i"""
-        if self.is_pure_real(other):
+        z = other if isinstance(other, Complex) else Complex(real=other)
+
+        if self.is_pure_real() and z.is_pure_real():
             return Complex(
-                real=self.real ** other.real,
+                real=self.real ** z.real,
                 image=0,
             )
-        else:
-            z = other if isinstance(other, Complex) else Complex(real=other)
-            w = math.atan2(self.image, self.real)
-            r = (self.real ** 2 + self.image ** 2) ** 0.5
-            R = math.exp(z.real * math.log(r) - w * z.image)
-            W = z.image * math.log(r) + w * z.real
-            return Complex(
-                real=R * math.cos(W),
-                image=R * math.sin(W),
-            )
+        
+        w = math.atan2(self.image, self.real)
+        r = (self.real ** 2 + self.image ** 2) ** 0.5
+        R = math.exp(z.real * math.log(r) - w * z.image)
+        W = z.image * math.log(r) + w * z.real
+        return Complex(
+            real=R * math.cos(W),
+            image=R * math.sin(W),
+        )
     
     def sin(self):
         """

@@ -34,7 +34,7 @@ It supports function making e.g. `f(x) = 3x + 1`
 
 ## commands
 commands: `ls`, `help` or `?`, `h`, `ch`, `quit`
-`ls`: list
+`ls`: list variables and user made functions
 `h` : history
 `ch` : clear history
 others are self-explainatory

@@ -45,5 +45,11 @@ class Test_calculator(ut.TestCase):
         result = calculator.calculate("h(3)")
         self.compare_complex(result, 95, 0)
 
+    def test_ufunc_two_params(self):
+        calculator = Calculator()
+        calculator.calculate("f(x, y) = x + y", True)
+        result = calculator.calculate("f(3, 5)", True)
+        self.compare_complex(result, 8, 0)
+
 if __name__ == '__main__':
     ut.main()

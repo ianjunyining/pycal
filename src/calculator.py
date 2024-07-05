@@ -74,6 +74,8 @@ class Calculator:
                 terms.append(Term(TermType.Func, func=func_map[term]))
             elif term in op_map.keys():
                 terms.append(Term(TermType.Operator, op=op_map[term]))
+            elif term == "," or term == "":
+                pass
             else:
                 terms.append(Term(TermType.Var, var=term))
                     
@@ -111,9 +113,17 @@ class Calculator:
                     new_terms.append(term)
                 else:
                     new_terms.append(term)
-                
-
+        
             last_term = term
+
+        assignment_index = None
+        for i in range(len(new_terms)):
+            if new_terms[i].op == OP.ASSIGNMENT:
+                assignment_index = i
+                break
+        if assignment_index and new_terms[0].ufunc:
+            new_terms[0].is_ufunc_declaration = True
+
         return new_terms
 
 
@@ -168,9 +178,12 @@ class Calculator:
         elif func == FUNC.ABS:
             return math.fabs(num1.real)
         
-    def ufunc_call(self, num, ufunc):
+    def ufunc_call(self, nums, ufunc):
         ufunc_attr = self.ufunc_map[ufunc]
-        self.local_vars[ufunc_attr.paramaters[0]] = num
+        if len(nums) != len(ufunc_attr.paramaters):
+            raise Exception(f"expected {len(ufunc_attr.paramaters)} but got {len(nums)}")
+        for num, paramater in zip(nums, ufunc_attr.paramaters):
+            self.local_vars[paramater] = num
         return self.calculate_from_exp_tree_no_assignment(ufunc_attr.exp_tree)
 
     def calculate_from_exp_tree_no_assignment(self, node: Node):
@@ -196,8 +209,10 @@ class Calculator:
                 num = self.calculate_from_exp_tree_no_assignment(node.left)
                 return self.func_call(num, 0, node.data.func)
         elif node.data.term_type == TermType.UFUNC:
-            num = self.calculate_from_exp_tree_no_assignment(node.left)
-            return self.ufunc_call(num, node.data.ufunc)
+            nums = [self.calculate_from_exp_tree_no_assignment(node.left)]
+            if node.right:
+                nums.append(self.calculate_from_exp_tree_no_assignment(node.right))
+            return self.ufunc_call(nums, node.data.ufunc)
         elif node.data.term_type == TermType.Var:
             var = node.data.var
             if var in self.local_vars.keys():
@@ -214,9 +229,14 @@ class Calculator:
         rterm = node.data
         if rterm.is_assignment():
             if node.left.data.term_type == TermType.UFUNC:
-                paramater = [node.left.left.data.var]
-                func_name = node.left.data.ufunc
-                self.ufunc_map[func_name] = UfuncAttr(node.right, paramater, self.expression)
+                ufunc_term = node.left.data
+                left_term = node.left.left.data
+                paramaters = [left_term.var]
+                if node.left.right:
+                    right_term = node.left.right.data
+                    paramaters.append(right_term.var)
+                func_name = ufunc_term.ufunc
+                self.ufunc_map[func_name] = UfuncAttr(node.right, paramaters, self.expression)
             else:
                 var = node.left  
                 num = self.calculate_from_exp_tree_no_assignment(node.right)
@@ -243,9 +263,16 @@ class Calculator:
                 parent.right = right
                 stack.append(parent)
             elif item.term_type == TermType.UFUNC:
+                if item.is_ufunc_declaration:
+                    assert len(stack) <= 2
+                    num_operands = len(stack)
+                else:
+                    num_operands = self.ufunc_map[item.ufunc].num_operands
+                right = stack.pop() if num_operands == 2 else None
                 left = stack.pop()
                 parent = Node(item)
-                parent.left = left 
+                parent.left = left
+                parent.right = right
                 stack.append(parent)
             else:
                 stack.append(Node(item))
@@ -286,6 +313,7 @@ class Calculator:
         new_terms = self.modify_in_order(terms)
         post_order = self.in_order_to_post_order(new_terms)
         expression_tree = self.post_order_to_expression_tree(post_order)
+        tree.show(expression_tree, [])
         result = self.calculate_from_exp_tree(expression_tree)
         if log:
             print([str(term) for term in terms])

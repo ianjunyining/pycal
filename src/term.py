@@ -151,6 +151,7 @@ class Term():
         self.func = func
         self.var = var
         self.ufunc = ufunc
+        self.is_ufunc_declaration = False
         if term_type == TermType.Func:
             self.op = OP.FUNC_OP
         if term_type == TermType.UFUNC:

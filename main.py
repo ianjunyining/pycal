@@ -71,5 +71,4 @@ if __name__ == '__main__':
                 result = calculator.calculate(input_str, log)
                 print(str(result))
             except Exception as e:
-                print(e)
-        
+                print(e)        

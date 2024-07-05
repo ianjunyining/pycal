@@ -117,7 +117,7 @@ class TermAttr:
             "tan" : FUNC.TAN,
             "gcd" : FUNC.GCD,
             "lcm" : FUNC.LCM,
-            "p" : FUNC.PERM,
+            "P" : FUNC.PERM,
             "comb" : FUNC.COMB,
             "floor" : FUNC.FLOOR,
             "ceil" : FUNC.CEIL,

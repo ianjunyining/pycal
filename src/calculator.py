@@ -4,6 +4,17 @@ from src.tree import Node, Tree
 from src.term import Term, TermType, FUNC, OP, TermAttr, UfuncAttr
 from src.complex import Complex
 
+class MissingParaException(Exception):
+    pass
+
+class UnknownVarable(Exception):
+    pass
+
+class MissingLeftPar(Exception):
+    pass
+
+class MissingRightPar(Exception):
+    pass
 
 class Calculator:
     def __init__(self) -> None:
@@ -220,7 +231,7 @@ class Calculator:
             elif var in self.global_vars.keys():
                 return self.global_vars[var]
             else:
-                raise Exception(f"unknown variable: {var}")
+                raise UnknownVarable(f"unknown variable: {var}")
         else:
             return node.data.num
 
@@ -288,11 +299,10 @@ class Calculator:
                 if term.op == OP.LEFT_PAR:
                     stack.append(term)
                 elif term.op == OP.RIGHT_PAR:
-                    while stack[-1].op != OP.LEFT_PAR:
-                        if stack:
-                            post_order.append(stack.pop())
-                        else:
-                            raise Exception("Missed right parentesis")
+                    while stack and stack[-1].op != OP.LEFT_PAR:
+                        post_order.append(stack.pop())
+                    if not stack:
+                        raise MissingLeftPar("Missing left parentesis")
                     stack.pop()
                 elif len(stack) == 0:
                     stack.append(term)
@@ -313,7 +323,6 @@ class Calculator:
         new_terms = self.modify_in_order(terms)
         post_order = self.in_order_to_post_order(new_terms)
         expression_tree = self.post_order_to_expression_tree(post_order)
-        tree.show(expression_tree, [])
         result = self.calculate_from_exp_tree(expression_tree)
         if log:
             print([str(term) for term in terms])

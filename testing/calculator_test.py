@@ -52,28 +52,28 @@ class Test_calculator(ut.TestCase):
         result = calculator.calculate("f(3, 5)")
         self.compare_complex(result, 8, 0)
 
-    def _test_ufunc_three_params(self):
+    def test_ufunc_three_params(self):
         calculator = Calculator()
         calculator.calculate("f(x, y, z) = x + y + z")
         result = calculator.calculate("f(3, 5, 7)")
         self.compare_complex(result, 15, 0)
 
-    def _test_ufunc_no_comma(self):
+    def test_ufunc_no_comma(self):
         calculator = Calculator()
         calculator.calculate("f(x y) = x + y")
         result = calculator.calculate("f(3, 5)")
         self.compare_complex(result, 8, 0)
 
-    def _test_local_var_scope(self):
+    def test_local_var_scope(self):
         calculator = Calculator()
         calculator.calculate("f(x) = x + 1")
         calculator.calculate("f(3)")
         self.assertRaises(cal.UnknownVarable, calculator.calculate, "x")
 
-    def _test_ufunc_missing_para(self):
+    def test_ufunc_missing_para(self):
         calculator = Calculator()
         calculator.calculate("f(x, y) = x + y")
-        self.assertRaises(cal.MissingParaException, calculator.calculate, "1+f(3)")
+        self.assertRaises(cal.MissingOperand, calculator.calculate, "1+2+f(3)")
 
     def test_ufunc_missing_left_par(self):
         calculator = Calculator()
@@ -81,7 +81,7 @@ class Test_calculator(ut.TestCase):
 
     def test_ufunc_missing_right_par(self):
         calculator = Calculator()
-        self.assertRaises(cal.MissingRightPar, calculator.calculate, "(2 * (2 + 3) + 1")
+        self.assertRaises(cal.MissingRightPar, calculator.calculate, "(2 * (2 + 3) + 1") #
 
 if __name__ == '__main__':
     ut.main()

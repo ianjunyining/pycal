@@ -4,7 +4,7 @@ from src.tree import Node, Tree
 from src.term import Term, TermType, FUNC, OP, TermAttr, UfuncAttr
 from src.complex import Complex
 
-class MissingParaException(Exception):
+class MissingOperand(Exception):
     pass
 
 class UnknownVarable(Exception):
@@ -14,6 +14,9 @@ class MissingLeftPar(Exception):
     pass
 
 class MissingRightPar(Exception):
+    pass
+
+class MissingComma(Exception):
     pass
 
 class Calculator:
@@ -59,8 +62,8 @@ class Calculator:
         return new_parts
 
     def parse_string(self, expression):
-        terms = []
-        pattern = r"([+\-*/^\(\)\!\%\,\=])"
+        terms = []   
+        pattern = r"([+\-*/^\(\)\!\%\,\= ])"
         parts = re.split(pattern, expression)
         parts = [part.strip() for part in parts]
         parts = self.modify_parts(parts)
@@ -220,9 +223,9 @@ class Calculator:
                 num = self.calculate_from_exp_tree_no_assignment(node.left)
                 return self.func_call(num, 0, node.data.func)
         elif node.data.term_type == TermType.UFUNC:
-            nums = [self.calculate_from_exp_tree_no_assignment(node.left)]
-            if node.right:
-                nums.append(self.calculate_from_exp_tree_no_assignment(node.right))
+            assert isinstance(node.left, list)
+            parameters = node.left
+            nums = [self.calculate_from_exp_tree_no_assignment(parameter) for parameter in parameters]
             return self.ufunc_call(nums, node.data.ufunc)
         elif node.data.term_type == TermType.Var:
             var = node.data.var
@@ -241,11 +244,9 @@ class Calculator:
         if rterm.is_assignment():
             if node.left.data.term_type == TermType.UFUNC:
                 ufunc_term = node.left.data
-                left_term = node.left.left.data
-                paramaters = [left_term.var]
-                if node.left.right:
-                    right_term = node.left.right.data
-                    paramaters.append(right_term.var)
+                paramaters = []
+                for parameter in node.left.left: # node.left.left.data is a list
+                    paramaters.append(parameter.data.var)
                 func_name = ufunc_term.ufunc
                 self.ufunc_map[func_name] = UfuncAttr(node.right, paramaters, self.expression)
             else:
@@ -260,6 +261,8 @@ class Calculator:
         stack = []
         for item in post_order_list:
             if item.term_type == TermType.Operator:
+                if len(stack) < TermAttr.op_operands(item.op):
+                    raise MissingOperand("Missing operand")
                 right = stack.pop()
                 left = stack.pop() if TermAttr.op_operands(item.op) == 2 else None
                 parent = Node(item)
@@ -275,15 +278,15 @@ class Calculator:
                 stack.append(parent)
             elif item.term_type == TermType.UFUNC:
                 if item.is_ufunc_declaration:
-                    assert len(stack) <= 2
+                    assert len(stack) <= 3
                     num_operands = len(stack)
                 else:
                     num_operands = self.ufunc_map[item.ufunc].num_operands
-                right = stack.pop() if num_operands == 2 else None
-                left = stack.pop()
+                parameters = []
+                for _ in range(num_operands):
+                    parameters.append(stack.pop())
                 parent = Node(item)
-                parent.left = left
-                parent.right = right
+                parent.left = parameters
                 stack.append(parent)
             else:
                 stack.append(Node(item))
@@ -292,7 +295,7 @@ class Calculator:
 
     def in_order_to_post_order(self, terms : list):
         post_order = []
-        stack = []
+        stack = [] # For operators, func, ufunc
         for term in terms:
             if term.term_type == TermType.Operator or term.term_type == TermType.Func or \
                 term.term_type == TermType.UFUNC:
@@ -312,12 +315,15 @@ class Calculator:
                     stack.append(term)
             else:
                 post_order.append(term)
+        if OP.LEFT_PAR in [term.op for term in stack]:
+            raise MissingRightPar("Missing right parentesis")
         while stack:
             post_order.append(stack.pop())
         return post_order
     
     def calculate(self, expression: str, log=False):
         tree = Tree()
+        self.local_vars = {}
         self.expression = expression
         terms = self.parse_string(expression)
         new_terms = self.modify_in_order(terms)

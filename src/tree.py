@@ -58,13 +58,17 @@ class Tree():
     def show(self, node: Node, path: list, i=0):
         if not node:
             return
-        if i > 0:
-            self._show_prefix(path, str(node.data))
+        if isinstance(node, list):
+            for item in node:
+                self._show_prefix(path, str(item.data))
         else:
-            print(node.data)
-        self.show(node.left, path + ["|"], i + 1)
-        if not node.left and node.right:
-            self._show_prefix(path + ["|"], "None")
-        self.show(node.right, path + [" "], i + 1)
-        if node.left and not node.right:
-            self._show_prefix(path + [" "], "None") 
+            if i > 0:
+                self._show_prefix(path, str(node.data))
+            else:
+                print(node.data)
+            self.show(node.left, path + ["|"], i + 1)
+            if not node.left and node.right:
+                self._show_prefix(path + ["|"], "None")
+            self.show(node.right, path + [" "], i + 1)
+            if node.left and not node.right:
+                self._show_prefix(path + [" "], "None") 

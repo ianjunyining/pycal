@@ -88,7 +88,7 @@ class Calculator:
                 terms.append(Term(TermType.Func, func=func_map[term]))
             elif term in op_map.keys():
                 terms.append(Term(TermType.Operator, op=op_map[term]))
-            elif term == "," or term == "":
+            elif term == "":
                 pass
             else:
                 terms.append(Term(TermType.Var, var=term))
@@ -261,6 +261,9 @@ class Calculator:
         stack = []
         for item in post_order_list:
             if item.term_type == TermType.Operator:
+                if item.op == OP.COMMA:
+                    continue
+
                 if len(stack) < TermAttr.op_operands(item.op):
                     raise MissingOperand("Missing operand")
                 right = stack.pop()

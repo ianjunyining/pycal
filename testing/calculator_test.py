@@ -48,15 +48,15 @@ class Test_calculator(ut.TestCase):
 
     def test_ufunc_two_params(self):
         calculator = Calculator()
-        calculator.calculate("f(x, y) = x + y")
-        result = calculator.calculate("f(3, 5)")
-        self.compare_complex(result, 8, 0)
+        calculator.calculate("f(x, y) = x / y")
+        result = calculator.calculate("f(2*4, 4)")
+        self.compare_complex(result, 2, 0)
 
     def test_ufunc_three_params(self):
         calculator = Calculator()
-        calculator.calculate("f(x, y, z) = x + y + z")
-        result = calculator.calculate("f(3, 5, 7)")
-        self.compare_complex(result, 15, 0)
+        calculator.calculate("f(x, y, z) = x / y / z")
+        result = calculator.calculate("f(8, 4, 2)")
+        self.compare_complex(result, 1, 0)
 
     def test_ufunc_no_comma(self):
         calculator = Calculator()

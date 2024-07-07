@@ -16,6 +16,7 @@ class OP(Enum):
     NONE = 12
     ASSIGNMENT = 15
     UFUNC_OP = 16
+    COMMA = 17
 
 
 class FUNC(Enum):
@@ -58,16 +59,17 @@ class TermAttr:
             OP.ASSIGNMENT : 0,
             OP.LEFT_PAR : 1,
             OP.RIGHT_PAR : 1,
-            OP.SUB : 2,
-            OP.ADD : 2,
-            OP.DIV : 3,
-            OP.MUL : 3,
-            OP.MOD : 3,
-            OP.POW : 4,
-            OP.FAC : 5,
-            OP.NEG : 5,
-            OP.FUNC_OP : 6,
-            OP.UFUNC_OP : 6,
+            OP.COMMA : 2,
+            OP.SUB : 3,
+            OP.ADD : 3,
+            OP.DIV : 4,
+            OP.MUL : 4,
+            OP.MOD : 4,
+            OP.POW : 5,
+            OP.FAC : 6,
+            OP.NEG : 6,
+            OP.FUNC_OP : 7,
+            OP.UFUNC_OP : 7,
         }
         return priority[op1] >= priority[op2]
 
@@ -138,6 +140,7 @@ class TermAttr:
             "!" : OP.FAC,
             "%" : OP.MOD,
             "=" : OP.ASSIGNMENT,
+            "," : OP.COMMA,
         }
 
 

@@ -58,7 +58,8 @@ if __name__ == '__main__':
         elif input_str == "ls":
             display_var_and_ufunc(calculator.global_vars, calculator.ufunc_map)
         elif input_str == "h":
-            print(history)
+            for item in history:
+                print(item)
         elif input_str == "ch":
             history = []
             print("cleared history")

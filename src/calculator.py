@@ -3,6 +3,7 @@ import re
 from src.tree import Node, Tree
 from src.term import Term, TermType, FUNC, OP, TermAttr, UfuncAttr
 from src.complex import Complex
+from src.solver import Solver
 
 class MissingOperand(Exception):
     pass
@@ -241,6 +242,9 @@ class Calculator:
 
     def calculate_from_exp_tree(self, node: Node):
         rterm = node.data
+        if rterm.func == FUNC.SOLVE:
+            solve = Solver(self)
+            return solve.solve(node.left, Complex(real=1, image=1))
         if rterm.is_assignment():
             if node.left.data.term_type == TermType.UFUNC:
                 ufunc_term = node.left.data

@@ -11,6 +11,11 @@ class Complex():
     def is_pure_image(self):
         return self.real == 0
 
+    def comp(self, other, err):
+        comp1 = math.fabs(self.real - other.real) < err
+        comp2 = math.fabs(self.image - other.image) < err
+        return comp1 and comp2
+
     def add(self, other):
         return Complex(
             real=self.real + other.real, 

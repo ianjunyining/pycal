@@ -34,6 +34,7 @@ class FUNC(Enum):
     CEIL = 12
     ABS = 13
     ARCSIN = 14
+    SOLVE = 15
 
 
 class TermType(Enum):
@@ -89,6 +90,7 @@ class TermAttr:
             FUNC.CEIL : 1,
             FUNC.ABS : 1,
             FUNC.ARCSIN : 1,
+            FUNC.SOLVE : 1,
         }
         return func_operands_dict[func]
 
@@ -126,6 +128,7 @@ class TermAttr:
             "abs" : FUNC.ABS,
             "arcsin" : FUNC.ARCSIN,
             "asin" : FUNC.ARCSIN,
+            "solve" : FUNC.SOLVE,
         }
     
     def op_map():

@@ -4,11 +4,12 @@ from src.term import TermType
 from src.complex import Complex, unique_complex
 
 class Solver():
-    def __init__(self, calculator) -> None:
+    def __init__(self, calculator, log=False) -> None:
         self.calculator = calculator
         self.err = 1e-7
         self.max_irr = 1000
         self.h = Complex(real=1e-6)
+        self.log = log
 
     def solve(self, exp_tree:Node):
         x0_list = [
@@ -28,7 +29,6 @@ class Solver():
             if val.almost_equal(Complex(real=0, image=0), self.err):
                 valid_sol.append(solution)
 
-
         return unique_complex(valid_sol)
     
     def _solve(self,exp_tree: Node , x0):
@@ -38,11 +38,17 @@ class Solver():
         x_current = x0
         irr = 0
         while not x_current.almost_equal(x_last, self.err) and irr < self.max_irr:
+            if self.log:
+                print(f"it={irr}, current={x_current}")
             irr += 1
             x_last = x_current
             p1 = self.evaluate(exp_tree, x_last)
             p2 = self.derivative_by_numeric(exp_tree, x_last)
             x_current = x_last.sub(p1.div(p2))
+
+        if self.log:
+            print()
+
         return x_current
 
     def evaluate(self, exp_tree:Node, val):

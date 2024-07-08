@@ -26,6 +26,7 @@ class Calculator:
         self.local_vars = {}
         self.ufunc_map = {}
         self.expression = None
+        self.log = False
 
     def split_number_and_variable(self, input_str):
         # Define the regular expression pattern
@@ -242,7 +243,7 @@ class Calculator:
     def calculate_from_exp_tree(self, node: Node):
         rterm = node.data
         if rterm.func == FUNC.SOLVE:
-            solve = Solver(self)
+            solve = Solver(self, self.log)
             return solve.solve(node.left)
         if rterm.is_assignment():
             if node.left.data.term_type == TermType.UFUNC:
@@ -328,6 +329,7 @@ class Calculator:
         return post_order
     
     def calculate(self, expression: str, log=False):
+        self.log = log
         tree = Tree()
         self.local_vars = {}
         self.expression = expression
@@ -336,7 +338,7 @@ class Calculator:
         post_order = self.in_order_to_post_order(new_terms)
         expression_tree = self.post_order_to_expression_tree(post_order)
         result = self.calculate_from_exp_tree(expression_tree)
-        if log:
+        if self.log:
             print([str(term) for term in terms])
             print([str(term) for term in new_terms])
             print([str(term) for term in post_order])

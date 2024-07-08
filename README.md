@@ -33,17 +33,18 @@ It supports pre-defined functions:
     }
 
 ## user functions
-It supports function making e.g. `f(x) = 3x + 1`
+It supports function making e.g. `f(x) = 3x + 1`, 
 
 It supports unlimited number of parameters
 `f(a, b, c, d, e) = a + b + c + d + e`
 
 ## commands
-commands: `ls`, `help` or `?`, `h`, `ch`, `quit`
+commands: `ls`, `help` or `?`, `h`, `ch`, `quit`, `log`
 
 - `ls`: list variables and user made functions
 - `h` : history
 - `ch` : clear history
+- `log`: turn on/off log (display terms and expression tree)
 
 others are self-explainatory
 
@@ -59,6 +60,8 @@ This calculator is straight-forward e.g.,
 - `a = 3 * 2 ^ 2`
 - `b = a/2`
 - `d(a) = a + a^2 + a^3`
+- `f(x)=x^3 - 100 * x^2 + x - 100`
+- `solve(f(x))`: find roots for `f(x)`
 
 
 # 4. Basic design

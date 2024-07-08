@@ -40,11 +40,14 @@ def display_var_and_ufunc(global_var:dict, ufunc_map:dict):
         print(val.expression)
     
 def print_result(result):
+    if not result:
+        return
     if isinstance(result, list):
+        print("ans =")
         for item in result:
             print(str(item))
     else:
-        print(str(result))
+        print("ans =", str(result))
 
 if __name__ == '__main__':
     calculator = Calculator()

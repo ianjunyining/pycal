@@ -55,7 +55,7 @@ class Tree():
         print("".join(prefix) + "|--- " + v)
         
 
-    def show(self, node: Node, path: list, i=0):
+    def _show(self, node: Node, path: list, i=0):
         if not node:
             return
         if isinstance(node, list):
@@ -66,9 +66,12 @@ class Tree():
                 self._show_prefix(path, str(node.data))
             else:
                 print(node.data)
-            self.show(node.left, path + ["|"], i + 1)
+            self._show(node.left, path + ["|"], i + 1)
             if not node.left and node.right:
                 self._show_prefix(path + ["|"], "None")
-            self.show(node.right, path + [" "], i + 1)
+            self._show(node.right, path + [" "], i + 1)
             if node.left and not node.right:
                 self._show_prefix(path + [" "], "None") 
+
+    def show(self, node: Node):
+        self._show(node, [])

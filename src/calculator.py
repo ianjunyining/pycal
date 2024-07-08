@@ -94,7 +94,10 @@ class Calculator:
                 pass
             else:
                 terms.append(Term(TermType.Var, var=term))
-                    
+            
+        if self.log:
+            print("raw terms: ", [str(term) for term in terms])
+                            
         return terms
 
     def modify_in_order(self, terms):
@@ -139,7 +142,10 @@ class Calculator:
                 break
         if assignment_index and new_terms[0].ufunc:
             new_terms[0].is_ufunc_declaration = True
-
+        
+        if self.log:
+            print("new terms: ", [str(term) for term in new_terms])
+            
         return new_terms
 
 
@@ -245,7 +251,7 @@ class Calculator:
         if rterm.func == FUNC.SOLVE:
             solve = Solver(self, self.log)
             return solve.solve(node.left)
-        if rterm.is_assignment():
+        elif rterm.is_assignment():
             if node.left.data.term_type == TermType.UFUNC:
                 ufunc_term = node.left.data
                 paramaters = []
@@ -257,7 +263,6 @@ class Calculator:
                 var = node.left  
                 num = self.calculate_from_exp_tree_no_assignment(node.right)
                 self.global_vars[var.data.var] = num
-
         else:
             return self.calculate_from_exp_tree_no_assignment(node)
 
@@ -297,6 +302,12 @@ class Calculator:
                 stack.append(parent)
             else:
                 stack.append(Node(item))
+
+        if self.log:
+            tree = Tree()
+            print("Expression tree:")
+            tree.show(stack[0])
+
         return stack[0]
     
 
@@ -326,11 +337,14 @@ class Calculator:
             raise MissingRightPar("Missing right parentesis")
         while stack:
             post_order.append(stack.pop())
+        
+        if self.log:
+            print("post order: ", [str(term) for term in post_order])
+
         return post_order
     
     def calculate(self, expression: str, log=False):
         self.log = log
-        tree = Tree()
         self.local_vars = {}
         self.expression = expression
         terms = self.parse_string(expression)
@@ -338,9 +352,4 @@ class Calculator:
         post_order = self.in_order_to_post_order(new_terms)
         expression_tree = self.post_order_to_expression_tree(post_order)
         result = self.calculate_from_exp_tree(expression_tree)
-        if self.log:
-            print([str(term) for term in terms])
-            print([str(term) for term in new_terms])
-            print([str(term) for term in post_order])
-            tree.show(expression_tree, [])
         return result

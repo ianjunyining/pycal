@@ -2,41 +2,35 @@ from src.calculator import Calculator
 
 help_str = """
 Supported predefined functions
-        return {
-            "sin" : FUNC.SIN,
-            "cos" : FUNC.COS,
-            "ln" : FUNC.LN,
-            "sqrt" : FUNC.SQRT,
-            "exp" : FUNC.EXP,
-            "tan" : FUNC.TAN,
-            "gcd" : FUNC.GCD,
-            "lcm" : FUNC.LCM,
-            "p" : FUNC.PERM,
-            "comb" : FUNC.COMB,
-            "floor" : FUNC.FLOOR,
-            "ceil" : FUNC.CEIL,
-            "abs" : FUNC.ABS,
-            "arcsin" : FUNC.ARCSIN,
-            "asin" : FUNC.ARCSIN,
-        }
+    sin, cos, ln, sqrt, exp, tan, gcd, lcm, p, 
+    comb, floor, ceil, abs, arcsin, asin
+
 Supported operators
-        return {
-            "+" : OP.ADD,
-            "-" : OP.SUB,
-            "*" : OP.MUL,
-            "/" : OP.DIV,
-            "^" : OP.POW,
-            "(" : OP.LEFT_PAR,
-            ")" : OP.RIGHT_PAR,
-            "!" : OP.FAC,
-            "%" : OP.MOD,
-            "=" : OP.ASSIGNMENT,
-        }
+    +, -, *, /, ^, !, %, =, (, )
+
+Support constants, complex numbers, and variables
+    pi, e, i
+    x = e^(i * pi) + 1
+
+Examples
+    a = 1+i
+    sin(a)cos(pi) + 5 * (2 + a)
 
 define user function e.g.,
-f(x) = 3x + 1
-g(y) = 2y + 1
-rec(n) = n % 2
+    f(x) = 3x + 1
+    g(x, y) = 2y + x^2
+    rec(n) = n % 2
+
+solve equations
+    f(x)=x^3 - 100 * x^2 + x - 100
+    solve(f(x))
+
+commands
+    - `ls`: list variables and user made functions
+    - `h` : history
+    - `ch` : clear history
+    - `log`: turn on/off log (display terms and expression tree)
+
 """
 
 def display_var_and_ufunc(global_var:dict, ufunc_map:dict):

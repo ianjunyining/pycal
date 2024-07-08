@@ -3,6 +3,7 @@ We designed and implemented a Calculator in python. It supports common operators
 
 # 2. Supported 
 This calculator supports all kinds of different functions.
+
 ## Numbers, constants, and variables
 This calculator supports real numbers and imaginary numbers, e.g., `2 + 3i`. 
 
@@ -14,29 +15,24 @@ It supports operators: `+`, `-`, `÷`, `*`, `^`, `!`, `%`, and `()`
 ## functions
 It supports pre-defined functions: 
 
-    self.func_map = {
-        "sin" : FUNC.SIN,
-        "cos" : FUNC.COS,
-        "ln" : FUNC.LN,
-        "sqrt" : FUNC.SQRT,
-        "exp" : FUNC.EXP,
-        "tan" : FUNC.TAN,
-        "gcd" : FUNC.GCD,
-        "lcm" : FUNC.LCM,
-        "p" : FUNC.PERM,
-        "comb" : FUNC.COMB,
-        "floor" : FUNC.FLOOR,
-        "ceil" : FUNC.CEIL,
-        "abs" : FUNC.ABS,
-        "arcsin" : FUNC.ARCSIN,
-        "asin" : FUNC.ARCSIN,
-    }
+    sin, cos, ln, sqrt, exp, tan, gcd, lcm, p, 
+    comb, floor, ceil, abs, arcsin, asin
 
 ## user functions
 It supports function making e.g. `f(x) = 3x + 1`, 
 
 It supports unlimited number of parameters
 `f(a, b, c, d, e) = a + b + c + d + e`
+
+## Solve equations
+    f(x)=x^3 - 100 * x^2 + x - 100
+    solve(f(x))
+
+Found roots
+
+    100.0
+    -0.0 + 1.0i
+    -0.0 - 1.0i
 
 ## commands
 commands: `ls`, `help` or `?`, `h`, `ch`, `quit`, `log`

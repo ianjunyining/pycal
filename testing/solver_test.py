@@ -14,7 +14,7 @@ class TestSolver(ut.TestCase):
         calculator = Calculator()
         calculator.calculate("f(x) = x + 1")
         result = calculator.calculate("solve(f(x))")
-        self.compare_complex(result, -1, 0)
+        self.compare_complex(result[1], -1, 0)
 
 if __name__ == '__main__':
     ut.main()

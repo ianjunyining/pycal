@@ -11,7 +11,7 @@ class Complex():
     def is_pure_image(self):
         return self.real == 0
 
-    def comp(self, other, err):
+    def almost_equal(self, other, err):
         comp1 = math.fabs(self.real - other.real) < err
         comp2 = math.fabs(self.image - other.image) < err
         return comp1 and comp2
@@ -68,10 +68,17 @@ class Complex():
         z = other if isinstance(other, Complex) else Complex(real=other)
 
         if self.is_pure_real() and z.is_pure_real():
-            return Complex(
+            val = Complex(
                 real=self.real ** z.real,
                 image=0,
             )
+            if isinstance(val.real, complex):
+                return Complex(
+                    real=val.real.real,
+                    image=val.real.imag
+                )
+            else:
+                return val
         
         w = math.atan2(self.image, self.real)
         r = (self.real ** 2 + self.image ** 2) ** 0.5
@@ -195,3 +202,18 @@ class Complex():
             return i_str + "i"
         elif self.image == 0 and self.real == 0:
             return "0"
+        
+
+def unique_complex(nums: list):
+    unique = []
+    
+    for num in nums:
+        is_unique = True
+        for u in unique:
+            if num.almost_equal(u, 1e-6):
+                is_unique = False
+                break
+        if is_unique:
+            unique.append(num)
+
+    return unique

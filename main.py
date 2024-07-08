@@ -45,6 +45,12 @@ def display_var_and_ufunc(global_var:dict, ufunc_map:dict):
     for key, val in ufunc_map.items():
         print(val.expression)
     
+def print_result(result):
+    if isinstance(result, list):
+        for item in result:
+            print(str(item))
+    else:
+        print(str(result))
 
 if __name__ == '__main__':
     calculator = Calculator()
@@ -70,6 +76,6 @@ if __name__ == '__main__':
         else:
             try:
                 result = calculator.calculate(input_str, log)
-                print(str(result))
+                print_result(result)
             except Exception as e:
                 print(e)

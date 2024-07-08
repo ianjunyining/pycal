@@ -1,5 +1,5 @@
 import unittest as ut
-from src.complex import Complex
+from src.complex import Complex, unique_complex
 
 
 class TestComplex(ut.TestCase):
@@ -95,6 +95,14 @@ class TestComplex(ut.TestCase):
         c = Complex(real=1)
         tan = c.tan()
         self.compare_complex(tan, 1.55740772465, 0)
+
+    def test_unique_complex(self):
+        c1 = Complex(real=1.55751)
+        c2 = Complex(real=1.55741)
+        result = unique_complex([c1, c2, c2, c1])
+        self.assertEqual(len(result), 2)
+        self.assertTrue(c1.almost_equal(result[0], 1e-10))
+        self.assertTrue(c2.almost_equal(result[1], 1e-10))
 
 if __name__ == '__main__':
     ut.main()

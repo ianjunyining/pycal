@@ -238,13 +238,12 @@ class Calculator:
                 raise UnknownVarable(f"unknown variable: {var}")
         else:
             return node.data.num
-
-
+        
     def calculate_from_exp_tree(self, node: Node):
         rterm = node.data
         if rterm.func == FUNC.SOLVE:
             solve = Solver(self)
-            return solve.solve(node.left, Complex(real=1, image=1))
+            return solve.solve(node.left)
         if rterm.is_assignment():
             if node.left.data.term_type == TermType.UFUNC:
                 ufunc_term = node.left.data

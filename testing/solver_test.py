@@ -10,9 +10,15 @@ class TestSolver(ut.TestCase):
         self.assertAlmostEqual(complex.real, expect_real)
         self.assertAlmostEqual(complex.image, expect_image)
 
-    def test_equation(self):
+    def test_equation1(self):
         calculator = Calculator()
         calculator.calculate("f(x) = x + 1")
+        result = calculator.calculate("solve(f(x))")
+        self.compare_complex(result[1], -1, 0)
+
+    def test_equation2(self):
+        calculator = Calculator()
+        calculator.calculate("f(x) = x^2 + sin(x) - 1", True)
         result = calculator.calculate("solve(f(x))")
         self.compare_complex(result[1], -1, 0)
 

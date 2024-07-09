@@ -22,7 +22,12 @@ class Solver():
             Complex(real=0, image=1),
             Complex(real=0, image=-1),
         ]
-        solutions = [self._solve(exp_tree, x0) for x0 in x0_list]
+        solutions = []
+        for i in range(len(x0_list)):
+            if self.log:
+                print(f"try {i}-th initial x0: {x0_list[i]}")
+            solutions.append(self._solve(exp_tree, x0_list[i]))
+
         valid_sol = []
         for solution in solutions:
             val = self.evaluate(exp_tree, solution)

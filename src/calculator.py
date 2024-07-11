@@ -111,7 +111,7 @@ class Calculator:
                 else:
                     new_terms.append(term)
             else:
-                if last_term.term_type == TermType.Operator and term.op == OP.SUB:
+                if last_term.term_type == TermType.Operator and not last_term.op == OP.RIGHT_PAR and term.op == OP.SUB:
                     # 3 * -1
                     new_terms.append(Term(TermType.Operator, op=OP.NEG))
                 elif last_term.op == OP.LEFT_PAR and term.op == OP.SUB:

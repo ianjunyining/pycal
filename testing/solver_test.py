@@ -18,9 +18,20 @@ class TestSolver(ut.TestCase):
 
     def test_equation2(self):
         calculator = Calculator()
-        calculator.calculate("f(x) = x^2 + sin(x) - 1", True)
+        calculator.calculate("f(x) = x^2 + sin(x) - 1")
         result = calculator.calculate("solve(f(x))")
         self.compare_complex(result[1], -1.409624, 0)
+
+    def test_equation3(self):
+        calculator = Calculator()
+        calculator.calculate("f(x) = x + 1")
+        result = calculator.calculate("solve(f)")
+        self.compare_complex(result[0], -1, 0)
+
+    def test_equation4(self):
+        calculator = Calculator()
+        result = calculator.calculate("solve(x + 1)")
+        self.compare_complex(result[0], -1, 0)
 
 if __name__ == '__main__':
     ut.main()

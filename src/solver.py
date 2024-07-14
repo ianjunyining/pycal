@@ -1,6 +1,6 @@
 import math
 from src.tree import Node
-from src.term import TermType
+from src.term import TermType, Term
 from src.complex import Complex, unique_complex
 
 class Solver():
@@ -37,8 +37,15 @@ class Solver():
         return unique_complex(valid_sol)
     
     def _solve(self,exp_tree: Node , x0):
-        # point to num
-        exp_tree.left[0].data.term_type = TermType.Operand
+        if exp_tree.left:
+            # point to num
+            exp_tree.left[0].data.term_type = TermType.Operand
+        else:
+            # change type to ufunc and sw
+            if not exp_tree.data.ufunc:
+                exp_tree.data.ufunc = exp_tree.data.var
+            exp_tree.data.term_type = TermType.UFUNC
+            exp_tree.left = [Node(Term(term_type=TermType.Operand))]
         x_last = Complex(real=math.inf)
         x_current = x0
         irr = 0

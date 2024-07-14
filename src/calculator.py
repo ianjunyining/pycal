@@ -245,11 +245,21 @@ class Calculator:
                 raise UnknownVarable(f"unknown variable: {var}")
         else:
             return node.data.num
-        
+    
+    def find_local_var(self):
+        terms = self.parse_string(self.expression)
+        for term in terms:
+            if term.term_type == TermType.Var:
+                if not term.var in self.global_vars.keys():
+                    return term.var 
+
     def calculate_from_exp_tree(self, node: Node):
         rterm = node.data
         if rterm.func == FUNC.SOLVE:
             solve = Solver(self, self.log)
+            if not node.left.data.ufunc and not node.left.data.var:
+                self.ufunc_map["TEMPFUNC"] = UfuncAttr(node.left, self.find_local_var(), self.expression)
+                node.left = Node(Term(term_type=TermType.UFUNC, ufunc="TEMPFUNC"))
             return solve.solve(node.left)
         elif rterm.is_assignment():
             if node.left.data.term_type == TermType.UFUNC:

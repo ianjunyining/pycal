@@ -258,7 +258,7 @@ class Calculator:
         if rterm.func == FUNC.SOLVE:
             solve = Solver(self, self.log)
             if not node.left.data.ufunc and not node.left.data.var:
-                self.ufunc_map["TEMPFUNC"] = UfuncAttr(node.left, self.find_local_var(), self.expression)
+                self.ufunc_map["TEMPFUNC"] = UfuncAttr(node.left, [self.find_local_var()], self.expression)
                 node.left = Node(Term(term_type=TermType.UFUNC, ufunc="TEMPFUNC"))
             return solve.solve(node.left)
         elif rterm.is_assignment():

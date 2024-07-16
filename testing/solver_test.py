@@ -30,7 +30,7 @@ class TestSolver(ut.TestCase):
 
     def test_equation4(self):
         calculator = Calculator()
-        result = calculator.calculate("solve(x + 1)")
+        result = calculator.calculate("solve(xy + 1)")
         self.compare_complex(result[0], -1, 0)
 
 if __name__ == '__main__':

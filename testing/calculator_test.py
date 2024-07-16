@@ -83,5 +83,10 @@ class Test_calculator(ut.TestCase):
         calculator = Calculator()
         self.assertRaises(cal.MissingRightPar, calculator.calculate, "(2 * (2 + 3) + 1") #
 
+    def test_empty_parameter_list(self):
+        calculator = Calculator()
+        calculator.calculate("f() = x + 1")
+        self.assertRaises(cal.UnknownVarable, calculator.calculate, "f(0)") #
+
 if __name__ == '__main__':
     ut.main()

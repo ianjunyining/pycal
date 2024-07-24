@@ -300,7 +300,7 @@ class Calculator:
                 stack.append(parent)
             elif item.term_type == TermType.UFUNC:
                 if item.is_ufunc_declaration:
-                    assert len(stack) <= 3
+                    assert len(stack) > 0
                     num_operands = len(stack)
                 else:
                     num_operands = self.ufunc_map[item.ufunc].num_operands

@@ -143,6 +143,7 @@ class TermAttr:
             "!" : OP.FAC,
             "%" : OP.MOD,
             "=" : OP.ASSIGNMENT,
+            ":" : OP.ASSIGNMENT,
             "," : OP.COMMA,
         }
 

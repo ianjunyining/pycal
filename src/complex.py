@@ -194,6 +194,8 @@ class Complex():
         i_str = str(math.fabs(round(self.image, 10)))
         if self.image > 0 and self.real != 0:
             return f"{r_str} + {i_str}i"
+        elif self.image < 0 and self.real == 0:
+            return f"-{i_str}i"
         elif self.image < 0 and self.real != 0:
             return f"{r_str} - {i_str}i"
         elif self.image == 0 and self.real != 0:

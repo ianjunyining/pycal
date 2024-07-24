@@ -1,3 +1,4 @@
+import os
 from src.calculator import Calculator
 
 help_str = """
@@ -70,6 +71,8 @@ if __name__ == '__main__':
             log = not log
         elif input_str == "help" or input_str == "?":
             print(help_str)
+        elif input_str == "clear":
+            os.system("clear")
         else:
             try:
                 result = calculator.calculate(input_str, log)

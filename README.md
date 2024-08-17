@@ -27,6 +27,9 @@ It supports unlimited number of parameters
 ## Solve equations
     f(x)=x^3 - 100 * x^2 + x - 100
     solve(f(x))
+    solve(f)
+    solve(x^3 - 100 * x^2 + x - 100)
+
 
 Found roots
 
@@ -58,6 +61,12 @@ This calculator is straight-forward e.g.,
 - `d(a) = a + a^2 + a^3`
 - `f(x)=x^3 - 100 * x^2 + x - 100`
 - `solve(f(x))`: find roots for `f(x)`
+- `2 + 2(6 + 2) * i / 4`
+- `s = 3 + i^i`
+- `f(x) = i * x + sin(x + s) `
+- `ls`
+- `solve(f)`
+- `solve(x^6 + sin(x) + 1)`
 
 
 # 4. Basic design
@@ -100,6 +109,11 @@ Tree:
 
 ### Calculate from expression tree
 We calculate the result in inorder from expression tree
+
+## Solver
+We define solver to find roots of a equations when it is equal to zero.
+
+    solve(x^2 + 1)
 
 # License
 See [License](https://github.com/ianjunyining/pycal/blob/main/LICENSE).
